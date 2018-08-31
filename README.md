@@ -13,7 +13,7 @@
 ### The following is the result of applying test data to the model:
 
 ![price and profit plot](https://github.com/SophWang/Bayesian_bitcoin/blob/master/bayesian_model/result.png)    
-'Best n_list': [90, 180, 360], 'Best n_clusters': 100, 'Best n_effective': 16, 'Best step': 4, 'Best threshold': 0.005, 'Balance': 2202.825, 'Sharpe ratio': 0.0026   
+{'Best n_list': [90, 180, 360], 'Best n_clusters': 100, 'Best n_effective': 16, 'Best step': 4, 'Best threshold': 0.005, 'Balance': 2202.825, 'Sharpe ratio': 0.0026}   
 Correct rate is: 0.569 
 cost =  65737.275   
 final profit:  855.070   
