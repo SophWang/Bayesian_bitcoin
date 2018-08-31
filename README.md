@@ -12,10 +12,24 @@
 
 ### The following is the result of applying test data to the model:
 
-![price and profit plot](https://github.com/SophWang/Bayesian_bitcoin/blob/master/bayesian_model/param_adjusted.png)    
-{'Best n list': [100, 190, 370, 730], 'Best n_cluster': 95, 'Best n_effective': 16, 'Best step': 2, 'Best threshold': 0.001, 'Balance': 5378.0000062, 'sharpe ratio': 23.1978}   
-Correct rate is: 0.62   
-Bank balance: 5885.765   
-final profit: 885.765   
-return rate: 1.168   
-borrowing capacity: 5000   
+![price and profit plot](https://github.com/SophWang/Bayesian_bitcoin/blob/master/bayesian_model/result.png)    
+{'Best n_list': [90, 180, 360], 'Best n_clusters': 100, 'Best n_effective': 16, 'Best step': 4, 'Best threshold': 0.005, 'Balance': 2202.825, 'Sharpe ratio': 0.0026}   
+Correct rate is: 0.569 
+cost =  65737.275   
+final profit:  855.070   
+Bank balance =  5855.070   
+return_rate =  0.171   
+vol = 0.112   
+beta = 0.745   
+CVaR(0.05) = 0.0076   
+Drawdown = 0.1527   
+Max Drawdown = 0.1527   
+Treynor Ratio =0.0134   
+Sharpe Ratio = 0.0897   
+Information Ratio = 1.328   
+Excess VaR = 2.478   
+Conditional Sharpe Ratio = 1.314   
+Calmar Ratio = 0.065   
+Sterling Ratio = 0.109   
+Burke Ratio = 0.0731   
+
