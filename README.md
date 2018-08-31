@@ -12,7 +12,7 @@
 
 ### The following is the result of applying test data to the model:
 
-![price and profit plot](https://github.com/SophWang/Bayesian_bitcoin/blob/master/bayesian_model/param_adjusted.png)    
+![price and profit plot](https://github.com/SophWang/Bayesian_bitcoin/blob/master/bayesian_model/result.png)    
 {'Best n list': [100, 190, 370, 730], 'Best n_cluster': 95, 'Best n_effective': 16, 'Best step': 2, 'Best threshold': 0.001, 'Balance': 5378.0000062, 'sharpe ratio': 23.1978}   
 Correct rate is: 0.62   
 Bank balance: 5885.765   
