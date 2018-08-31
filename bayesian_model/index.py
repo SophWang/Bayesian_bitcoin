@@ -4,28 +4,19 @@ import numpy.random as nrand
 from empyrical import max_drawdown, alpha_beta
 
 
-# alpha=0.05
-
 class Calculate_index(object):
-    def __init__(self, returns, market, er, rf, threshold, investment, periods):
+    def __init__(self, returns,  market, er, rf, threshold, investment, periods, alpha):
         self.returns = returns
         self.market = market
         self.er = er
         self.rf = rf
         self.threshold = threshold
-        self.investment = investment
+        self.investment=investment
         self.periods = periods
+        self.alpha=alpha
+
 
     def vol(self):
-        """
-        Note - for some of the metrics the absolute value is returns. This is because if the risk (loss) is higher we want to
-        discount the expected excess return from the portfolio by a higher amount. Therefore risk should be positive.
-        """
-
-        '''
-        volatility
-        '''
-
         # Return the standard deviation of returns
         return numpy.std(self.returns)
 
@@ -72,19 +63,19 @@ class Calculate_index(object):
 
     def var(self):
         # This method calculates the historical simulation var of the returns
-        alpha = self.alpha_beta()[0]
+        #alpha=self.alpha_beta()[0]
         sorted_returns = numpy.sort(self.returns)
         # Calculate the index associated with alpha
-        index = int(alpha * len(sorted_returns))
+        index = int(self.alpha * len(sorted_returns))
         # VaR should be positive
         return abs(sorted_returns[index])
 
     def cvar(self):
-        alpha = self.alpha_beta()[0]
+        #alpha = self.alpha_beta()[0]
         # This method calculates the condition VaR of the returns
         sorted_returns = numpy.sort(self.returns)
         # Calculate the index associated with alpha
-        index = alpha * len(sorted_returns)
+        index = self.alpha * len(sorted_returns)
         # Calculate the total VaR beyond alpha
         sum_var = sorted_returns[0]
         for i in range(1, int(index)):
@@ -97,19 +88,19 @@ class Calculate_index(object):
     drawdown
     '''
 
-    def prices(self, investment):
+    def prices(self):
         # Converts returns into prices
         s = [self.investment]
         for i in range(len(self.returns)):
-            s.append(investment * (1 + self.returns[i]))
+            s.append(self.investment * (1 + self.returns[i]))
         return numpy.array(s)
 
     def dd(self):
         # Returns the draw-down given time period tau
-        values = self.prices(100)
+        values = self.prices()
         pos = len(values) - 1
         pre = pos - self.periods
-        drawdown = float('+inf')
+        drawdown = 50
         # Find the maximum drawdown given tau
         while pre >= 0:
             dd_i = (values[pos] / values[pre]) - 1
@@ -141,7 +132,7 @@ class Calculate_index(object):
             total_dd += abs(drawdowns[i])
         return total_dd / self.periods
 
-    def average_dd_squared(self, periods):
+    def average_dd_squared(self):
         # Returns the average maximum drawdown squared over n periods
         drawdowns = []
         for i in range(0, len(self.returns)):
@@ -149,9 +140,9 @@ class Calculate_index(object):
             drawdowns.append(drawdown_i)
         drawdowns = sorted(drawdowns)
         total_dd = abs(drawdowns[0])
-        for i in range(0, periods - 2):
+        for i in range(0, self.periods - 2):
             total_dd += abs(drawdowns[i])
-        return total_dd / periods
+        return total_dd / self.periods
 
     '''
     risk-adjust return based on volatility
@@ -183,11 +174,11 @@ class Calculate_index(object):
     '''
 
     def excess_var(self):
-        alpha = self.alpha_beta()[0]
+        #alpha=self.alpha_beta()[0]
         return (self.er - self.rf) / self.var()
 
     def conditional_sharpe_ratio(self):
-        alpha = self.alpha_beta()[0]
+        #alpha = self.alpha_beta()[0]
         return (self.er - self.rf) / self.cvar()
 
     '''
@@ -216,21 +207,21 @@ class Calculate_index(object):
     def calmar_ratio(self):
         return (self.er - self.rf) / self.max_dd()
 
-    def sterling_ration(self, periods):
+    def sterling_ration(self):
         return (self.er - self.rf) / self.average_dd()
 
-    def burke_ratio(self, periods):
-        return (self.er - self.rf) / math.sqrt(self.average_dd_squared(periods))
+    def burke_ratio(self):
+        return (self.er - self.rf) / math.sqrt(self.average_dd_squared())
 
     def test_risk_metrics(self):
         # This is just a testing method
         r = nrand.uniform(-1, 1, 50)
         m = nrand.uniform(-1, 1, 50)
         print("vol =", self.vol())
-        print("alpha=", self.alpha_beta()[0], "beta =", self.alpha_beta()[1])
-        # print("hpm(0.0)_1 =", self.hpm(r, 0.0, 1))
-        # print("lpm(0.0)_1 =", self.lpm(r, 0.0, 1))
-        # print("VaR(0.05) =", self.var())
+        print("beta =", self.alpha_beta()[1])
+        #print("hpm(0.0)_1 =", self.hpm(r, 0.0, 1))
+        #print("lpm(0.0)_1 =", self.lpm(r, 0.0, 1))
+        #print("VaR(0.05) =", self.var())
         print("CVaR(0.05) =", self.cvar())
         print("Drawdown =", self.dd())
         print("Max Drawdown =", self.max_dd())
@@ -252,20 +243,20 @@ class Calculate_index(object):
         print("Excess VaR =", self.excess_var())
         print("Conditional Sharpe Ratio =", self.conditional_sharpe_ratio())
         # Risk-adjusted return based on Lower Partial Moments
-        # print("Omega Ratio =", self.omega_ratio(e, r, f))  #
-        # print("Sortino Ratio =", self.sortino_ratio(e, r, f))
-        # print("Kappa 3 Ratio =", self.Omega_Ratio(e, r, f))
-        # print("Gain Loss Ratio =", self.gain_loss_ratio(r))
-        # print("Upside Potential Ratio =", self.upside_potential_ratio(r))
+        #print("Omega Ratio =", self.omega_ratio(e, r, f))  #
+        #print("Sortino Ratio =", self.sortino_ratio(e, r, f))
+        #print("Kappa 3 Ratio =", self.Omega_Ratio(e, r, f))
+        #print("Gain Loss Ratio =", self.gain_loss_ratio(r))
+        #print("Upside Potential Ratio =", self.upside_potential_ratio(r))
         # Risk-adjusted return based on Drawdown risk
         print("Calmar Ratio =", self.calmar_ratio())
-        print("Sterling Ratio =", self.sterling_ration(5))
-        print("Burke Ratio =", self.burke_ratio(5))
+        print("Sterling Ratio =", self.sterling_ration())
+        print("Burke Ratio =", self.burke_ratio())
 
     if __name__ == "__main__":
         from bayesian_model.index import Calculate_index
-        test = Calculate_index([0, 1, 2, 3], [1, 2, 3, 4], 1, 1, 1, 100)
+        test = Calculate_index([0,1,2,3], [1,2,3,4], 1, 1, 1,5000,5,0.05)
         risk_metrics = test.test_risk_metrics()
-        risk_adjusted_metrics = test.test_risk_adjusted_metrics()
-        # test_risk_metrics()
-        # test_risk_adjusted_metrics()
+        risk_adjusted_metrics=test.test_risk_adjusted_metrics()
+        #test_risk_metrics()
+        #test_risk_adjusted_metrics()
