@@ -12,7 +12,7 @@ class Prediction:
         self.price_3 = price_3
 
     '''
-    创建一个函数表示贝叶斯模型的公式
+    创建一个函数表示贝叶斯模型的公式1
     '''
 
     def bayesian_model(self, x, center):
